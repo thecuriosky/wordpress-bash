@@ -1,0 +1,43 @@
+*troubleshooting ifconfig command not found*
+
+sudo apt install net-tools
+
+*Changing root password*
+
+sudo passwd root
+
+*Configuring and installing SSH*
+
+sudo apt-get update
+sudo apt-get install -y openssh-server
+
+*troubleshooting ifconfig command not found*
+
+sudo apt install net-tools
+
+*Configuring putty connection via Vmware*
+
+Right-click Virtual Machine in Library Pane
+Goto Settings > Network > NAT
+Check for IP address on Ubuntu using command: ifconfig
+Use the IP Address on putty to login
+
+*Installing curl*
+sudo apt-get update
+sudo apt-get install curl
+
+*installing and enabling Nginx*
+
+*installing and enabling mysql*
+sudo apt-get install mysql-server
+/usr/bin/mysql_secure_installation
+
+*Installing curl*
+sudo apt-get update
+sudo apt-get install curl
+
+*error while installing curl -Could not get lock /var/lib/dpkg/lock’ Error in Ubuntu *
+ps aux | grep -i apt
+sudo kill -"apt process id" 
+
+
