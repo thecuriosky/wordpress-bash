@@ -21,22 +21,45 @@ done
 
 #Adding domain to hosts
 
-#read ip from ipconfig and storing in variable 'ip' -- ip=$(command to fetch the ip from ifconfig)
-ip=$(ifconfig)
-echo "please enter your desired domain name"
+#read ip from ipconfig and storing in variable ip -- ip=$(command to fetch the ip from ifconfig)
+ip=$(ifconfig ens33|awk '/inet / {print $2}')
+echo "Please enter your desired domain name:\n"
 read domain
+sudo -- sh -c -e "echo '$ip $domain.com $domain' >> /etc/hosts";
+echo "+------------------------------------+"
+echo "$ip  $domain.com $domain"
+echo "entry created in /etc/hosts"
+echo "+------------------------------------+"
 
-ip=$(ifconfig)
-#d=$(which nginx)
-#read domain
-#echo "$domain.com $domain installation directory $d"
+#configuring nginx config file
+
+#downloading and ensuring if curl is installed
+
+#checking and installing PHP extensions for use with WordPress
+for php in php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+do
+dpkg --get-selections | grep $php
+if [ `echo $?` -eq 1 ]
+then
+echo "+------------------------------------+"
+echo "Installing $php"
+echo "+------------------------------------+"
+sudo apt-get install -y $php
+sudo systemctl restart php7.2-fpm
+else
+echo "+-----------------------------------------------------------+"
+echo "Great! $php was already installed, you're heck of a techie"
+echo "+-----------------------------------------------------------+"
+fi
+done
+#restart the PHP-FPM process so that the running PHP processor can leverage the newly installed features
+sudo systemctl restart php7.2-fpm
 
 
-#remove .com from example.com
-sed -i "$ip  $domain.com venus" /etc/hosts
 
+#editing nginx config file for wordpress
+sudo nano /etc/nginx/sites-available/akashmhaske.com
 
-#downloading wordpress and ensuring if curl is installed
 
 dpkg --get-selections | grep curl
 if [ `echo $?` -eq 1 ]
