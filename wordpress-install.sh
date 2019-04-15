@@ -24,7 +24,7 @@ done
 
 #read ip from ipconfig and storing in variable ip -- ip=$(command to fetch the ip from ifconfig)
 ip=$(ifconfig ens33|awk '/inet / {print $2}')
-echo "Please enter your desired domain name:\n"
+echo "Please enter your desired domain name:"
 read domain
 sudo -- sh -c -e "echo '$ip $domain.com $domain' >> /etc/hosts";
 echo "+------------------------------------+"
@@ -105,7 +105,15 @@ sudo systemctl reload nginx
 sudo mysql
 echo "enter root password when prompted"
 echo ""
-mysql -u root -p
+mysql -u root -p <<EOF
+CREATE DATABASE example.com_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+EXIT;
+EOF
+#Restart php
+sudo systemctl restart php7.2-fpm
+
 
 -----------------
 dpkg --get-selections | grep curl
